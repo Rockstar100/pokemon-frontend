@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './AddUser.css';
 
 function AddUser() {
   const [pokemonOwnerName, setPokemonOwnerName] = useState('');
@@ -34,9 +35,9 @@ function AddUser() {
   };
 
   return (
-    <div>
+    <div className="add-user-container">
       <h2>Add User</h2>
-      <form onSubmit={handleAddUser}>
+      <form className="add-user-form" onSubmit={handleAddUser}>
         <input
           type="text"
           value={pokemonOwnerName}

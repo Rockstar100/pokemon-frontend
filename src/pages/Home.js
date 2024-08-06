@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './Home.css';
 
 function Home() {
   const [users, setUsers] = useState([]);
@@ -19,9 +20,9 @@ function Home() {
   };
 
   return (
-    <div>
+    <div className="home-container">
       <h2>Home Page</h2>
-      <select onChange={handleUserChange}>
+      <select className="user-select" onChange={handleUserChange}>
         <option>Select User</option>
         {users.map(user => (
           <option key={user.pokemonOwnerName} value={user.pokemonOwnerName}>
@@ -30,7 +31,7 @@ function Home() {
         ))}
       </select>
       {selectedUser && (
-        <div>
+        <div className="pokemon-list">
           <h3>{selectedUser.pokemonOwnerName}'s Pokémons</h3>
           <ul>
             {selectedUser.pokemons.map(pokemon => (
