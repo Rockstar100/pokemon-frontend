@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './AddPokemon.css';
 
 function AddPokemon() {
   const [users, setUsers] = useState([]);
@@ -28,11 +29,11 @@ function AddPokemon() {
   };
 
   return (
-    <div>
+    <div className="add-pokemon-container">
       <h2>Add Pokémon</h2>
-      <form onSubmit={handleAddPokemon}>
-        <select value={selectedUser} onChange={(e) => setSelectedUser(e.target.value)}>
-          <option>Select User</option>
+      <form className="add-pokemon-form" onSubmit={handleAddPokemon}>
+        <select value={selectedUser} onChange={(e) => setSelectedUser(e.target.value)} required>
+          <option value="">Select User</option>
           {users.map(user => (
             <option key={user.pokemonOwnerName} value={user.pokemonOwnerName}>
               {user.pokemonOwnerName}
