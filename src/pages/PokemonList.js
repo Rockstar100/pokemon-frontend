@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './PokemonList.css';
 
 function PokemonList() {
   const [users, setUsers] = useState([]);
@@ -18,9 +19,9 @@ function PokemonList() {
   };
 
   return (
-    <div>
+    <div className="pokemon-list-container">
       <h2>Pokemon List</h2>
-      <table>
+      <table className="pokemon-table">
         <thead>
           <tr>
             <th>Owner Name</th>
@@ -37,7 +38,12 @@ function PokemonList() {
                 <td>{pokemon.pokemonName}</td>
                 <td>{pokemon.pokemonAbility}</td>
                 <td>
-                  <button onClick={() => handleDeleteUser(user.pokemonOwnerName)}>Delete</button>
+                  <button
+                    className="action-button"
+                    onClick={() => handleDeleteUser(user.pokemonOwnerName)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))
