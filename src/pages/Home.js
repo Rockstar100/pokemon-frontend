@@ -1,15 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { API_URL } from '../config';
 import './Home.css';
 
 function Home() {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const response = await axios.get('http://localhost:5000/users');
-      setUsers(response.data);
+      try {
+        const response = await axios.get(`${API_URL}/users`);
+        setUsers(response.data);
+      } catch (err) {
+        setError('Could not load users. Is the API running?');
+      } finally {
+        setLoading(false);
+      }
     };
     fetchUsers();
   }, []);
@@ -19,17 +28,24 @@ function Home() {
     setSelectedUser(user);
   };
 
+  if (loading) return <div className="home-container">Loading users...</div>;
+  if (error) return <div className="home-container">{error}</div>;
+
   return (
     <div className="home-container">
       <h2>Home Page</h2>
-      <select className="user-select" onChange={handleUserChange}>
-        <option>Select User</option>
-        {users.map(user => (
-          <option key={user.pokemonOwnerName} value={user.pokemonOwnerName}>
-            {user.pokemonOwnerName}
-          </option>
-        ))}
-      </select>
+      {users.length === 0 ? (
+        <p>No users yet. Add one from the "Add User" page.</p>
+      ) : (
+        <select className="user-select" onChange={handleUserChange}>
+          <option>Select User</option>
+          {users.map(user => (
+            <option key={user.pokemonOwnerName} value={user.pokemonOwnerName}>
+              {user.pokemonOwnerName}
+            </option>
+          ))}
+        </select>
+      )}
       {selectedUser && (
         <div className="pokemon-list">
           <h3>{selectedUser.pokemonOwnerName}'s Pokémons</h3>
