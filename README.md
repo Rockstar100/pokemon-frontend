@@ -1,70 +1,137 @@
-# Getting Started with Create React App
+# Pokemon Tracker
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React app for tracking which Pokémon belong to which trainer — register trainers, assign them Pokémon, and browse the full roster.
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+Pokemon Tracker is a small CRUD front end built with React and React Router. Trainers ("users") are registered with an initial Pokémon, more Pokémon can be added to existing trainers, and the full owner → Pokémon roster can be browsed or pruned from a table view.
 
-### `npm start`
+The project ships with a minimal in-memory mock API (`/server`) so it runs end-to-end locally without any external service or database.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+> **Note:** This was originally scaffolded as a frontend for a separate backend that was never published. The bundled `/server` mock API exists to make the app runnable and demonstrable; swap `REACT_APP_API_URL` for a real backend if you build one. See [Known Limitations](#known-limitations).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Features
 
-### `npm test`
+- Register a trainer with their first Pokémon (`/add-user`)
+- Add additional Pokémon to an existing trainer (`/add-pokemon`)
+- View a trainer's Pokémon roster on the home page (`/`)
+- Browse every trainer/Pokémon pair in a table and delete trainers (`/pokemon-list`)
+- Loading, empty, and error states on every data-fetching page
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Screenshots
 
-### `npm run build`
+| Home | Pokemon List |
+|---|---|
+| ![Home page showing a trainer's Pokémon roster](docs/images/home.png) | ![Table of all trainers and their Pokémon](docs/images/pokemon-list.png) |
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Add User | Add Pokémon |
+|---|---|
+| ![Form to register a new trainer](docs/images/add-user.png) | ![Form to add a Pokémon to an existing trainer](docs/images/add-pokemon.png) |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Technology Stack
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- React 18, React Router 6
+- Axios
+- Create React App (`react-scripts` 5)
+- Mock API: Express (in `/server`)
 
-### `npm run eject`
+## Local Installation
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Requires Node.js 18+.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+git clone https://github.com/Rockstar100/pokemon-frontend.git
+cd pokemon-frontend
+npm install
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Environment variables
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Copy `.env.example` to `.env` and adjust if needed:
 
-## Learn More
+```bash
+cp .env.example .env
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+| Variable | Description | Default |
+|---|---|---|
+| `REACT_APP_API_URL` | Base URL of the API the app talks to | `http://localhost:5000` |
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Run it
 
-### Code Splitting
+You need two terminals — one for the mock API, one for the React app:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+# Terminal 1 — mock API on :5000
+npm run server
 
-### Analyzing the Bundle Size
+# Terminal 2 — React app on :3000
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Open [http://localhost:3000](http://localhost:3000). The mock API seeds two sample trainers so the app has data to show immediately.
 
-### Making a Progressive Web App
+## Available Commands
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+| Command | Description |
+|---|---|
+| `npm start` | Run the React app in development mode |
+| `npm run build` | Build the app for production into `/build` |
+| `npm test` | Run the test suite |
+| `npm run server` | Install and start the mock API on port 5000 |
 
-### Advanced Configuration
+## Project Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```
+pokemon-frontend/
+├── public/            # Static HTML, favicon, manifest
+├── server/             # Minimal in-memory mock REST API
+│   └── index.js
+├── src/
+│   ├── config.js       # Reads REACT_APP_API_URL
+│   ├── pages/           # Home, AddUser, AddPokemon, PokemonList
+│   ├── App.js           # Routes and navigation
+│   └── index.js
+└── .github/workflows/deploy.yml
+```
 
-### Deployment
+## API Reference (mock server)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+| Method | Route | Description |
+|---|---|---|
+| `GET` | `/users` | List all trainers and their Pokémon |
+| `POST` | `/users` | Create a trainer (`{ pokemonOwnerName, pokemons: [...] }`) |
+| `PUT` | `/users/:ownerName` | Replace a trainer's full record (used to append a Pokémon) |
+| `DELETE` | `/users/:ownerName` | Delete a trainer |
 
-### `npm run build` fails to minify
+Data is stored in memory and resets whenever the mock server restarts.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Deployment
+
+The app deploys to GitHub Pages via `.github/workflows/deploy.yml` on every push to `main`.
+
+**Live demo:** https://Rockstar100.github.io/pokemon-frontend
+
+Because the deployed site is static, it has no backend to talk to — the hosted demo shows the UI shell with empty states (no trainers, no seed data) rather than working CRUD. Run it locally with the mock API (above) to see it fully functional.
+
+## Known Limitations
+
+- No real backend exists for this project; the included `/server` is a mock for local development/demo purposes, not a production API. Data isn't persisted anywhere and resets on restart.
+- The GitHub Pages live demo cannot reach the mock API (it only runs locally), so it renders empty states rather than live data.
+- No authentication — anyone can add/delete trainers.
+- `react-scripts` requires `DISABLE_ESLINT_PLUGIN=true` to build in this environment due to an ESLint version conflict inside `eslint-config-react-app`; this is set automatically in the deploy workflow.
+
+## Future Improvements
+
+- Replace the mock API with a real backend and a persistent database.
+- Add form validation and duplicate-trainer checks.
+- Add authentication so rosters are scoped per user.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
+
+## Author
+
+**Parveen Jaiswal**
+GitHub: [@Rockstar100](https://github.com/Rockstar100)

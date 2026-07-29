@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { API_URL } from '../config';
 import './AddUser.css';
 
 function AddUser() {
@@ -10,6 +11,7 @@ function AddUser() {
   const [initialPositionY, setInitialPositionY] = useState(0);
   const [speed, setSpeed] = useState(0);
   const [direction, setDirection] = useState('');
+  const [error, setError] = useState(null);
 
   const handleAddUser = async (e) => {
     e.preventDefault();
@@ -24,19 +26,24 @@ function AddUser() {
         direction,
       }],
     };
-    await axios.post('http://localhost:5000/users', userData);
-    setPokemonOwnerName('');
-    setPokemonName('');
-    setPokemonAbility('');
-    setInitialPositionX(0);
-    setInitialPositionY(0);
-    setSpeed(0);
-    setDirection('');
+    try {
+      await axios.post(`${API_URL}/users`, userData);
+      setPokemonOwnerName('');
+      setPokemonName('');
+      setPokemonAbility('');
+      setInitialPositionX(0);
+      setInitialPositionY(0);
+      setSpeed(0);
+      setDirection('');
+    } catch (err) {
+      setError('Could not add user.');
+    }
   };
 
   return (
     <div className="add-user-container">
       <h2>Add User</h2>
+      {error && <p className="error-message">{error}</p>}
       <form className="add-user-form" onSubmit={handleAddUser}>
         <input
           type="text"

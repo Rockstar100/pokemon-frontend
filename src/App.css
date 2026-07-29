@@ -2,6 +2,29 @@
   text-align: center;
 }
 
+.app-nav {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  padding: 16px;
+  background-color: #282c34;
+}
+
+.app-nav a {
+  color: #61dafb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.app-nav a:hover {
+  text-decoration: underline;
+}
+
+.error-message {
+  color: #c0392b;
+  font-weight: 600;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
